@@ -12,20 +12,21 @@ RUN INSTALL_PKGS="git llvm-toolset" && \
 
 RUN mkdir -p /opt/app-root && chown -R 1001:0 /opt/app-root
 
-COPY hello.cpp /opt/app-root/
+WORKDIR /opt/app-root
 
-RUN cd /opt/app-root/ && \
-    gcc hello.cpp -lstdc++ && \
+COPY hello.cpp .
+
+RUN gcc hello.cpp -lstdc++ && \
     mv a.out hello-world
+
 
 FROM ubi8/ubi-minimal
 
 ENV HOME=/opt/app-root
 
 RUN mkdir -p ${HOME}
-
-COPY --from=base /opt/app-root/ /opt/app-root/
+WORKDIR ${HOME}
+COPY --from=base /opt/app-root/hello-world /opt/app-root/
 
 USER 1001
-WORKDIR ${HOME}
 CMD ["./hello-world"]
