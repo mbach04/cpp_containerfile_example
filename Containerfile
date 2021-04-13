@@ -24,7 +24,7 @@ ENV HOME=/opt/app-root
 
 RUN mkdir -p ${HOME}
 
-COPY --from=base ${HOME}/hello-world ${HOME}/
+COPY --from=base /opt/app-root/hello-world /opt/app-root/
 
 USER 1001
 WORKDIR ${HOME}
